@@ -1442,28 +1442,40 @@ def test_dot(ctx=default_context()):
     check_numeric_gradient(dot_sym_yT(), [m1_npy, m2_npy.T])
     check_numeric_gradient(dot_sym_xT_yT(), [m1_npy.T, m2_npy.T])
 
-def test_batch_dot(ctx=default_context()):
+def test_batch_dot():
     for batch_size in range(1, 5):
         for m in range(1, 5):
             for k in range(1, 5):
                 for n in range(1, 5):
+                    transpose_a = (np.random.rand() > 0.5)
+                    transpose_b = (np.random.rand() > 0.5)
                     a_npy = np.random.normal(0, 1, (batch_size, m, k))
                     b_npy = np.random.normal(0, 1, (batch_size, k, n))
                     c_npy = np.empty((batch_size, m, n))
                     ograd_npy = np.random.normal(0, 1, (batch_size, m, n))
                     agrad_npy = np.empty((batch_size, m, k))
                     bgrad_npy = np.empty((batch_size, k, n))
+                    a_init_grad_npy = np.random.normal(size=(batch_size, m, k))
+                    b_init_grad_npy = np.random.normal(size=(batch_size, k, n))
                     for i in range(batch_size):
                         c_npy[i, :, :] = np.dot(a_npy[i, :, :], b_npy[i, :, :])
                         bgrad_npy[i, :, :] = np.dot(a_npy[i, :, :].T, ograd_npy[i, :, :])
                         agrad_npy[i, :, :] = np.dot(ograd_npy[i, :, :], b_npy[i, :, :].T)
                     a = mx.sym.Variable('a')
                     b = mx.sym.Variable('b')
-                    c = mx.sym.batch_dot(a, b)
-                    exe = c.simple_bind(ctx=ctx, a=a_npy.shape, b=b_npy.shape, grad_req='write')
-                    exe_add = c.simple_bind(ctx=ctx, a=a_npy.shape, b=b_npy.shape, grad_req='add')
-                    a_init_grad_npy = np.random.normal(size=(batch_size, m, k))
-                    b_init_grad_npy = np.random.normal(size=(batch_size, k, n))
+                    c = mx.sym.batch_dot(a, b, transpose_a=transpose_a, transpose_b=transpose_b)
+                    if transpose_a:
+                        a_npy = np.transpose(a_npy, axes=(0, 2, 1))
+                        agrad_npy = np.transpose(agrad_npy, axes=(0, 2, 1))
+                        a_init_grad_npy = np.transpose(a_init_grad_npy, axes=(0, 2, 1))
+                    if transpose_b:
+                        b_npy = np.transpose(b_npy, axes=(0, 2, 1))
+                        bgrad_npy = np.transpose(bgrad_npy, axes=(0, 2, 1))
+                        b_init_grad_npy = np.transpose(b_init_grad_npy, axes=(0, 2, 1))
+                    exe = c.simple_bind(ctx=default_context(),
+                                        a=a_npy.shape, b=b_npy.shape, grad_req='write')
+                    exe_add = c.simple_bind(ctx=default_context(),
+                                            a=a_npy.shape, b=b_npy.shape, grad_req='add')
                     exe_add.grad_dict['a'][:] = a_init_grad_npy
                     exe_add.grad_dict['b'][:] = b_init_grad_npy
                     outputs = exe.forward(is_train=True, a=a_npy, b=b_npy)
@@ -2126,10 +2138,135 @@ def test_special_functions_using_scipy():
 
 
 def test_init():
-    x = mx._symbol_internal._zeros(shape=(3,4))
-    exec1 = x.bind(default_context(), args=[], args_grad=[])
-    exec1.forward()
-    assert_allclose(exec1.outputs[0].asnumpy(), np.zeros((3,4)))
+    def test_basic_val_init(sym_func, np_func, shape, dtype):
+        x = sym_func(shape=shape, dtype=dtype)
+        exe = x.bind(default_context(), args=[], args_grad=[])
+        exe.forward()
+        assert_allclose(exe.outputs[0].asnumpy(), np_func(shape=shape, dtype=dtype))
+        assert exe.outputs[0].asnumpy().dtype == dtype
+    def test_arange():
+        for i in range(5):
+            start = np.random.rand() * 10
+            stop = start + np.random.rand() * 100
+            step = np.random.rand() * 4
+            repeat = int(np.random.rand() * 5) + 1
+            gt = np.arange(start=start, stop=stop, step=step)
+            gt = np.broadcast_to(gt.reshape((gt.shape[0], 1)), shape=(gt.shape[0], repeat)).ravel()
+            x = mx.sym.arange(start=start, stop=stop, step=step, repeat=repeat)
+            exe = x.simple_bind(ctx=default_context())
+            assert len(exe.grad_arrays) == 0
+            pred = exe.forward(is_train=False)[0].asnumpy()
+            assert_almost_equal(pred, gt, default_numerical_threshold())
+    test_basic_val_init(mx.sym.zeros, np.zeros, (3, 4), np.float32)
+    test_basic_val_init(mx.sym.ones, np.ones, 3, np.int32)
+    test_basic_val_init(mx.sym.ones, np.ones, (2, 2, 3), np.float16)
+    test_arange()
+
+
+def test_order(ctx=default_context()):
+    def gt_topk(dat, axis, ret_typ, k, is_ascend):
+        if ret_typ == "indices":
+            if is_ascend:
+                indices = np.arange(k)
+            else:
+                indices = np.arange(-1, -k-1, -1)
+            ret = np.take(dat.argsort(axis=axis), axis=axis, indices=indices, mode='wrap')
+        elif ret_typ == "value":
+            if is_ascend:
+                indices = np.arange(k)
+            else:
+                indices = np.arange(-1, -k-1, -1)
+            ret = np.take(np.sort(dat, axis=axis), axis=axis, indices=indices, mode='wrap')
+        else:
+            assert dat.shape == (5, 5, 5, 5)
+            assert axis is None or axis ==1
+            ret = np.zeros(dat.shape)
+            if is_ascend:
+                indices = np.arange(k)
+            else:
+                indices = np.arange(-1, -k-1, -1)
+            gt_argsort = np.take(dat.argsort(axis=axis), axis=axis, indices=indices, mode='wrap')
+            if axis is None:
+                ret.ravel()[gt_argsort] = 1
+            else:
+                for i in range(5):
+                    for j in range(5):
+                        for k in range(5):
+                            ret[i, gt_argsort[i, :, j, k], j, k] = 1
+        return ret
+    a_npy = np.random.normal(size=(5, 5, 5, 5))
+    a = mx.sym.Variable('a')
+    b = mx.sym.topk(a, axis=1, is_ascend=False, ret_typ="value", k=2)
+    check_numeric_gradient(b, location={'a': a_npy}, numeric_eps=1e-3, ctx=ctx)
+    check_symbolic_forward(b, location={'a': a_npy},
+                           expected=[gt_topk(dat=a_npy, axis=1, ret_typ="value", k=2,
+                                             is_ascend=False)])
+    b = mx.sym.topk(a, axis=None, is_ascend=True, ret_typ="value", k=10)
+    check_numeric_gradient(b, location={'a': a_npy}, numeric_eps=1e-4, check_eps=2E-2, ctx=ctx)
+    check_symbolic_forward(b, location={'a': a_npy},
+                           expected=[gt_topk(dat=a_npy, axis=None, ret_typ="value", k=10,
+                                             is_ascend=True)])
+    b = mx.sym.topk(a, axis=3, is_ascend=True, ret_typ="value", k=3)
+    check_numeric_gradient(b, location={'a': a_npy}, numeric_eps=1e-3, ctx=ctx)
+    check_numeric_gradient(b, location={'a': a_npy}, numeric_eps=1e-3, ctx=ctx,
+                           grad_nodes={'a': 'add'})
+    check_symbolic_forward(b, location={'a': a_npy},
+                           expected=[gt_topk(dat=a_npy, axis=3, ret_typ="value", k=3,
+                                             is_ascend=True)])
+    b = mx.sym.topk(a, axis=3, is_ascend=False, ret_typ="indices", k=3)
+    check_symbolic_backward(sym=b, location={'a': a_npy},
+                            out_grads=[np.random.normal(size=(5, 5, 5, 3))],
+                            expected=[np.zeros((5, 5, 5, 5))])
+    check_symbolic_forward(b, location={'a': a_npy},
+                           expected=[gt_topk(dat=a_npy, axis=3, ret_typ="indices", k=3,
+                                             is_ascend=False)])
+    b = mx.sym.topk(a, axis=1, is_ascend=True, ret_typ="mask", k=3)
+    check_symbolic_backward(sym=b, location={'a': a_npy},
+                            out_grads=[np.random.normal(size=(5, 5, 5, 5))],
+                            expected=[np.zeros((5, 5, 5, 5))])
+    check_symbolic_forward(b, location={'a': a_npy},
+                           expected=[gt_topk(dat=a_npy, axis=1, ret_typ="mask", k=3,
+                                             is_ascend=True)])
+    a = mx.sym.Variable('a')
+    b = mx.sym.sort(a, axis=1, is_ascend=False)
+    check_numeric_gradient(b, location={'a': a_npy}, numeric_eps=1e-3, ctx=ctx)
+    check_symbolic_forward(b, location={'a': a_npy},
+                           expected=[gt_topk(dat=a_npy, axis=1, ret_typ="value", k=5,
+                                             is_ascend=False)])
+    a = mx.sym.Variable('a')
+    b = mx.sym.argsort(a, axis=1, is_ascend=False)
+    check_symbolic_backward(sym=b, location={'a': a_npy},
+                            out_grads=[np.random.normal(size=(5, 5, 5, 5))],
+                            expected=[np.zeros((5, 5, 5, 5))])
+    check_symbolic_forward(b, location={'a': a_npy},
+                           expected=[gt_topk(dat=a_npy, axis=1, ret_typ="indices", k=5,
+                                             is_ascend=False)])
+    a = mx.sym.Variable('a')
+    b = mx.sym.argmax(a, axis=1, keepdims=True)
+    check_symbolic_backward(sym=b, location={'a': a_npy},
+                            out_grads=[np.random.normal(size=(5, 5, 5, 5))],
+                            expected=[np.zeros((5, 5, 5, 5))])
+    check_symbolic_forward(b, location={'a': a_npy},
+                           expected=[gt_topk(dat=a_npy, axis=1, ret_typ="indices", k=1,
+                                             is_ascend=False)])
+    a = mx.sym.Variable('a')
+    b = mx.sym.argmin(a, axis=1, keepdims=True)
+    check_symbolic_backward(sym=b, location={'a': a_npy},
+                            out_grads=[np.random.normal(size=(5, 5, 5, 5))],
+                            expected=[np.zeros((5, 5, 5, 5))])
+    check_symbolic_forward(b, location={'a': a_npy},
+                           expected=[gt_topk(dat=a_npy, axis=1, ret_typ="indices", k=1,
+                                             is_ascend=True)])
+
+
+def test_blockgrad():
+    a = mx.sym.Variable('a')
+    b = mx.sym.BlockGrad(a)
+    exe = b.simple_bind(ctx=default_context(), a=(10, 10))
+    a_npy = np.random.rand(10, 10)
+    exe.forward(is_train=True, a=a_npy)
+    assert_almost_equal(exe.outputs[0].asnumpy(), a_npy)
+    exe.backward()  # No error if BlockGrad works
 
 
 if __name__ == '__main__':
@@ -2180,3 +2317,5 @@ if __name__ == '__main__':
     test_sequence_mask()
     test_mathematical()
     test_special_functions_using_scipy()
+    test_order()
+    test_blockgrad()

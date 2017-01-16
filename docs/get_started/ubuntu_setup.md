@@ -43,14 +43,13 @@ It takes around 5 minutes to complete the installation.
 ```bash
     # Clone mxnet repository. In terminal, run the commands WITHOUT "sudo"
     git clone https://github.com/dmlc/mxnet.git ~/mxnet --recursive
-  
+
     # If building with GPU, add configurations to config.mk file:
     cd ~/mxnet
     cp make/config.mk .
     echo "USE_CUDA=1" >>config.mk
     echo "USE_CUDA_PATH=/usr/local/cuda" >>config.mk
     echo "USE_CUDNN=1" >>config.mk
-    echo "USE_DIST_KVSTORE=1" >>config.mk
 
     # Install MXNet for Python with all required dependencies
     cd ~/mxnet/setup-utils
@@ -64,6 +63,17 @@ It takes around 5 minutes to complete the installation.
 You can view the installation script we just used to install MXNet for Python [here](https://raw.githubusercontent.com/dmlc/mxnet/master/setup-utils/install-mxnet-ubuntu-python.sh).
 
 ### Install MXNet for R
+
+MXNet requires R-version to be 3.2.0 and above. If you are running earlier version of R, run below commands to update your R version, before running the installation script.
+
+```bash
+    sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+    sudo add-apt-repository ppa:marutter/rdev
+
+    sudo apt-get update
+    sudo apt-get upgrade
+    sudo apt-get install r-base r-base-dev
+```
 
 To install MXNet for R:
 
@@ -99,20 +109,24 @@ Install these dependencies using the following commands:
     sudo apt-get install -y build-essential git libatlas-base-dev libopencv-dev
 ```
 
-After you have downloaded and installed the dependencies, use the following commands to pull the MXNet source code from GitHub
+After installing the dependencies, use the following command to pull the MXNet source code from GitHub
 
 ```bash
-    git clone --recursive https://github.com/dmlc/mxnet
-```
-
-If building with GPU, add configurations to config.mk file:
-```bash
-    cd mxnet
+    # Get MXNet source code
+    git clone https://github.com/dmlc/mxnet.git ~/mxnet --recursive
+    # Move to source code parent directory
+    cd ~/mxnet
     cp make/config.mk .
+    echo "USE_BLAS=openblas" >>config.mk
+    echo "ADD_CFLAGS += -I/usr/include/openblas" >>config.mk
+    echo "ADD_LDFLAGS += -lopencv_core -lopencv_imgproc -lopencv_imgcodecs" >>config.mk
+```
+If building with ```GPU``` support, run below commands to add GPU dependency configurations to config.mk file:
+
+```bash
     echo "USE_CUDA=1" >>config.mk
     echo "USE_CUDA_PATH=/usr/local/cuda" >>config.mk
     echo "USE_CUDNN=1" >>config.mk
-    echo "USE_DIST_KVSTORE=1" >>config.mk
 ```
 
 Then build mxnet:
@@ -157,7 +171,7 @@ Run the following commands to install the MXNet dependencies and build the MXNet
 These commands create the MXNet R package as a tar.gz file that you can install as an R package. To install the R package, run the following command, use your MXNet version number:
 
 ```bash
-    R CMD INSTALL mxnet_0.7.tar.gz
+    R CMD INSTALL mxnet_current_r.tar.gz
 ```
 
 ### Install the MXNet Package for Julia

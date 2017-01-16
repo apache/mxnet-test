@@ -15,9 +15,12 @@ If you are running Python/R on Amazon Linux or Ubuntu, you can use Git Bash scri
 * [Step by step instruction guide for installing MXNet](http://mxnet.io/get_started/setup.html#overview)
 * [Common installation problems](http://mxnet.io/get_started/setup.html#common-installation-problems)
 
+## Using Pre-trained Models
+The MXNet [Model zoo](http://mxnet.io/model_zoo/index.html) is a growing collection of pre-trained models for a variety of tasks.
+In particular, the popular task of using a ConvNet to figure out what is in an image is described in detail in the tutorial on 
+[use pre-trained image classification models](http://mxnet.io/tutorials/python/predict_imagenet.html).  This provides step-by-step instructions on loading, customizing, and predicting image classes with the provided pre-trained image classification model.
+
 ## Use MXNet to Perform Specific Tasks
-* [How to use pre-trained models](http://mxnet.io/tutorials/python/predict_imagenet.html)
-*Provides step-by-step instructions on loading, customizing, and predicting image classes with the provided pre-trained image classification model.*
 
 * [How to use Fine-tune with Pre-trained Models](http://mxnet.io/how_to/finetune.html)
 *Provides instructions for tuning a pre-trained neural network for use with a new, smaller data set. It describes preparing the data, training a new final layer, and evaluating the results. For comparison, it uses two pre-trained models.*
@@ -43,6 +46,9 @@ If you are running Python/R on Amazon Linux or Ubuntu, you can use Git Bash scri
 
 * [How to improve MXNet performance](http://mxnet.io/how_to/perf.html)
 *Explains how to improve MXNet performance by using the recommended data format, storage locations, batch sizes, libraries, and parameters, and more.*
+
+* [How to use nnpack improve cpu performance of MXNet](http://mxnet.io/how_to/nnpack.html)
+*Explains how to improve cpu performance of MXNet by using [nnpack](https://github.com/Maratyszcza/NNPACK). currently, nnpack support convolution, max-pooling, fully-connected operator.*
 
 * [How to use MXNet within a Matlab environment](https://github.com/dmlc/mxnet/tree/master/matlab)
 *Provides the commands to load a model and data, get predictions, and do feature extraction in Matlab using the MXNet library. It includes an implementation difference between the two that can cause issues, and some basic troubleshooting.*

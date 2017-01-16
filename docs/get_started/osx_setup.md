@@ -1,72 +1,9 @@
 # Installing MXNet on OS X (Mac)
+MXNet currently supports Python, R, Julia, and Scala. For users of Python on Mac, MXNet provides a set of Git Bash scripts that installs all of the required MXNet dependencies and the MXNet library.
 
-Installing MXNet is a two-step process:
+## Prepare Environment for GPU Installation
 
-1. Build the shared library from the MXNet C++ source code.
-2. Install the supported language-specific packages for MXNet.
-
-**Note:** To change the compilation options for your build, edit the ```make/config.mk``` file and submit a build request with the ```make``` command.
-
-## Using the installation script
-
-Install [Homebrew](http://brew.sh/)  to get the dependencies required for MXNet, with the following commands:
-
-```bash
-	# Paste this command in Mac terminal to install Homebrew
-	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-
-	# Insert the Homebrew directory at the top of your PATH environment variable
-	export PATH=/usr/local/bin:/usr/local/sbin:$PATH
-```
-
-Initialize the git submodules and fetch them:
-
-```
-  git submodule init
-  git submodule update
-```
-
-Then you can execute the `setup-utils/install-mxnet-macosx.sh` script
-[1](https://github.com/dmlc/mxnet/tree/master/setup-utils/setup-utils/install-mxnet-macosx.sh).
-
-After that, you should have the mxnet library in the `lib` directory:
-```
-  mxnet$ ls lib/
-  libmxnet.a  libmxnet.so
-```
-
-Now you can skip to "Install the MXNet Package for Python" down below if you plan to use mxnet with Python.
-
---
-
-## Manual installation steps
-
-Alternatively you can follow through with the following manual instructions:
-
-You will need to install:
-
-- openblas and homebrew/science (for linear algebraic operations)
-- OpenCV (for computer vision operations)
-
-```bash
-	brew update
-	brew install pkg-config
-	brew install graphviz
-	brew install openblas
-	brew tap homebrew/science
-	brew install opencv
-	# For getting pip
-	brew install python
-	# For visualization of network graphs
-	pip install graphviz
-	# Jupyter notebook
-	pip install jupyter
-```
-After you have installed the dependencies, use one of the following options to pull the MXNet source code from Git and build MXNet. Both options produce a library called ```libmxnet.so```.
-
-### Prepare Environment for GPU Installation
-
-If you plan to build with GPU, you need to set up environemtn for CUDA and cuDNN.
+This section is optional. Skip to next section if you don't plan to use GPUs. If you plan to build with GPU, you need to set up environment for CUDA and cuDNN.
 
 First download and install [CUDA 8 toolkit](https://developer.nvidia.com/cuda-toolkit).
 
@@ -97,11 +34,77 @@ Unzip the file and change to cudnn root directory. Move the header files and lib
 
 Now we can start to build MXNet.
 
-**Option 1** Use the following commands to pull MXNet source code and build MXNet. The file called ```osx.mk``` has the configuration required for building MXNet on OS X. First copy ```make/osx.mk``` into ```config.mk```, which is used by the ```make``` command:
+## Quick Installation
+### Install MXNet for Python
+Clone the MXNet source code repository to your computer and run the installation script. In addition to installing MXNet, the script installs all MXNet dependencies: ```Numpy```, ```LibBLAS``` and ```OpenCV```.
+
+It takes around 5 to 10 minutes to complete the installation.
 
 ```bash
-    git clone --recursive https://github.com/dmlc/mxnet
-    cd mxnet
+    # Clone mxnet repository. In terminal, run the commands WITHOUT "sudo"
+    git clone https://github.com/dmlc/mxnet.git ~/mxnet --recursive
+
+    # If building with GPU, add configurations to config.mk file:
+    cd ~/mxnet
+    cp make/config.mk .
+    echo "USE_CUDA=1" >>config.mk
+    echo "USE_CUDA_PATH=/usr/local/cuda" >>config.mk
+    echo "USE_CUDNN=1" >>config.mk
+
+    # Install MXNet for Python with all required dependencies
+    cd ~/mxnet/setup-utils
+    bash install-mxnet-osx-python.sh
+```
+You can view the installation script we just used to install MXNet for Python [here](https://raw.githubusercontent.com/dmlc/mxnet/master/setup-utils/install-mxnet-osx-python.sh).
+
+## Standard installation
+
+Installing MXNet is a two-step process:
+
+1. Build the shared library from the MXNet C++ source code.
+2. Install the supported language-specific packages for MXNet.
+
+**Note:** To change the compilation options for your build, edit the ```make/config.mk``` file and submit a build request with the ```make``` command.
+
+### Build the Shared Library
+
+#### Install MXNet dependencies
+Install the dependencies, required for MXNet, with the following commands:
+- [Homebrew](http://brew.sh/)
+- OpenBLAS and homebrew/science (for linear algebraic operations)
+- OpenCV (for computer vision operations)
+
+```bash
+	# Paste this command in Mac terminal to install Homebrew
+	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+	# Insert the Homebrew directory at the top of your PATH environment variable
+	export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+```
+
+```bash
+	brew update
+	brew install pkg-config
+	brew install graphviz
+	brew install openblas
+	brew tap homebrew/science
+	brew install opencv
+	# For getting pip
+	brew install python
+	# For visualization of network graphs
+	pip install graphviz
+	# Jupyter notebook
+	pip install jupyter
+```
+
+#### Build MXNet Shared Library
+After you have installed the dependencies, pull the MXNet source code from Git and build MXNet to produce a MXNet library called ```libmxnet.so```.
+
+The file called ```osx.mk``` has the configuration required for building MXNet on OS X. First copy ```make/osx.mk``` into ```config.mk```, which is used by the ```make``` command:
+
+```bash
+    git clone --recursive https://github.com/dmlc/mxnet ~/mxnet
+    cd ~/mxnet
     cp make/osx.mk ./config.mk
     echo "USE_BLAS = openblas" >> ./config.mk
     echo "ADD_CFLAGS += -I/usr/local/opt/openblas/include" >> ./config.mk
@@ -110,7 +113,7 @@ Now we can start to build MXNet.
     make -j$(sysctl -n hw.ncpu)
 ```
 
-If building with GPU, add the following configuration to config.mk and build:
+If building with ```GPU``` support, add the following configuration to config.mk and build:
 ```bash
     echo "USE_CUDA = 1" >> ./config.mk
     echo "USE_CUDA_PATH = /usr/local/cuda" >> ./config.mk
@@ -119,76 +122,21 @@ If building with GPU, add the following configuration to config.mk and build:
 ```
 **Note:** To change build parameters, edit ```config.mk```.
 
-**Option 2**
-To generate an [Xcode](https://en.wikipedia.org/wiki/Xcode) project from MXNet source code, use the ```cmake``` command. Then, build MXNet using the Xcode IDE.
-
-```bash
-    mkdir build; cd build
-
-    cmake -G Xcode -DCMAKE_BUILD_TYPE=Release -DCMAKE_CONFIGURATION_TYPES="Release" -DUSE_OPENMP="OFF" -DUSE_CUDNN="OFF" -DUSE_CUDA="OFF" -DBLAS=MKL ..
-```
-
-After running the ```cmake``` command, use Xcode to open ```mxnet.xcodeproj```, change the following build settings flags, and build the project:
-
-1. Link-Time Optimization = Yes
-2. Optimisation Level = Fastest[-O3]
-
-Both sets of commands produce a library called ```libmxnet.so```.
-
 
 &nbsp;
 
 We have installed MXNet core library. Next, we will install MXNet interface package for the programming language of your choice:
-- [Python](#install-the-mxnet-package-for-python)
 - [R](#install-the-mxnet-package-for-r)
 - [Julia](#install-the-mxnet-package-for-julia)
 - [Scala](#install-the-mxnet-package-for-scala)
 
-## Install the MXNet Package for Python
 
-You need the following dependencies:
-
-- Python version 2.7 or later.
-- NumPy (to provide scientific computing operations).
-
-To check if Python is already installed run below command and you should be able to see which version of Python is installed on your machine.
-
-```bash
-	# Check if Python is already installed.
-	python --version
-	# Install Python if not already installed.
-	brew install python
-	# Install Numpy
-	brew install numpy
-```
-
-Next, we install Python package interface for MXNet. You can find the Python interface package for [MXNet on GitHub](https://github.com/dmlc/mxnet/tree/master/python/mxnet).
-
-```bash
-    # Assuming you are in root mxnet source code folder
-    cd python
-    sudo python setup.py install
-```
-Done! We have installed MXNet with Python interface. Run below commands to verify our installation is successful.
-```bash
-    # Open Python terminal
-    python
-
-    # You should be able to import mxnet library without any issues.
-    >>> import mxnet as mx;
-    >>> a = mx.nd.ones((2, 3));
-    >>> print ((a*2).asnumpy());
-        [[ 2.  2.  2.]
-        [ 2.  2.  2.]]
-```
-We actually did a small tensor computation using MXNet! You are all set with MXNet on your Mac.
-
-## Install the MXNet Package for R
+### Install the MXNet Package for R
 You have 2 options:
 1. Building MXNet with the Prebuilt Binary Package
 2. Building MXNet from Source Code
 
-### Building MXNet with the Prebuilt Binary Package
+#### Building MXNet with the Prebuilt Binary Package
 
 For OS X (Mac) users, MXNet provides a prebuilt binary package for CPUs. The prebuilt package is updated weekly. You can install the package directly in the R console using the following commands:
 
@@ -198,7 +146,7 @@ For OS X (Mac) users, MXNet provides a prebuilt binary package for CPUs. The pre
 	install.packages("mxnet")
 ```
 
-### Building MXNet from Source Code
+#### Building MXNet from Source Code
 
 Run the following commands to install the MXNet dependencies and build the MXNet R package.
 
@@ -217,10 +165,10 @@ Run the following commands to install the MXNet dependencies and build the MXNet
 These commands create the MXNet R package as a tar.gz file that you can install as an R package. To install the R package, run the following command, use your MXNet version number:
 
 ```bash
-	R CMD INSTALL mxnet_0.7.tar.gz
+	R CMD INSTALL mxnet_current_r.tar.gz
 ```
 
-## Install the MXNet Package for Julia
+### Install the MXNet Package for Julia
 The MXNet package for Julia is hosted in a separate repository, MXNet.jl, which is available on [GitHub](https://github.com/dmlc/MXNet.jl). To use Julia binding it with an existing libmxnet installation, set the ```MXNET_HOME``` environment variable by running the following command:
 
 ```bash
@@ -241,7 +189,7 @@ You might want to add this command to your ```~/.bashrc``` file. If you do, you 
 
 For more details about installing and using MXNet with Julia, see the [MXNet Julia documentation](http://dmlc.ml/MXNet.jl/latest/user-guide/install/).
 
-## Install the MXNet Package for Scala
+### Install the MXNet Package for Scala
 Before you build MXNet for Scala from source code, you must complete [building the shared library](#build-the-shared-library). After you build the shared library, run the following command from the MXNet source root directory to build the MXNet Scala package:
 
 ```bash

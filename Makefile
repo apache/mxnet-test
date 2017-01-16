@@ -73,7 +73,6 @@ endif
 
 ifeq ($(USE_NNPACK), 1)
 	CFLAGS += -DMXNET_USE_NNPACK=1
-	CFLAGS += -DMXNET_USE_NNPACK_NUM_THREADS=$(USE_NNPACK_NUM_THREADS)
 	LDFLAGS += -lnnpack
 endif
 
@@ -300,8 +299,11 @@ rpkg:
 	echo "import(methods)" >> R-package/NAMESPACE
 	R CMD INSTALL R-package
 	Rscript -e "require(mxnet); mxnet:::mxnet.export(\"R-package\")"
+	rm -rf R-package/NAMESPACE
 	Rscript -e "require(roxygen2); roxygen2::roxygenise(\"R-package\")"
 	R CMD build --no-build-vignettes R-package
+	rm -rf mxnet_current_r.tar.gz
+	mv mxnet_*.tar.gz mxnet_current_r.tar.gz
 
 scalapkg:
 	(cd $(ROOTDIR)/scala-package; \
@@ -333,7 +335,7 @@ jnilint:
 ifneq ($(EXTRA_OPERATORS),)
 clean: cyclean
 	$(RM) -r build lib bin *~ */*~ */*/*~ */*/*/*~ R-package/NAMESPACE R-package/man R-package/R/mxnet_generated.R \
-		R-package/inst R-package/src/*.o R-package/src/*.so
+		R-package/inst R-package/src/*.o R-package/src/*.so mxnet_*.tar.gz
 	cd $(DMLC_CORE); make clean; cd -
 	cd $(PS_PATH); make clean; cd -
 	cd $(NNVM_PATH); make clean; cd -
@@ -342,7 +344,7 @@ clean: cyclean
 else
 clean: cyclean
 	$(RM) -r build lib bin *~ */*~ */*/*~ */*/*/*~ R-package/NAMESPACE R-package/man R-package/R/mxnet_generated.R \
-		R-package/inst R-package/src/*.o R-package/src/*.so
+		R-package/inst R-package/src/*.o R-package/src/*.so mxnet_*.tar.gz
 	cd $(DMLC_CORE); make clean; cd -
 	cd $(PS_PATH); make clean; cd -
 	cd $(NNVM_PATH); make clean; cd -
