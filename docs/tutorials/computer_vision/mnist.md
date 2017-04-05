@@ -196,13 +196,15 @@ fc2   = mx.FullyConnected(data=fc1, num_hidden=10)
 lenet = mx.Softmax(data=fc2, name=:softmax)
 ```
 
-Note that LeNet is more complex than the previous multilayer perceptron, so we
-use GPU instead of CPU for training.
+Now train LeNet with the same hyper-parameters as before. Note that, if GPU is
+available, it is desirable to use GPU for the computation given that LeNet is
+more complex than the previous multilayer perceptron. To do so, we only need to
+change `mx.cpu()` to `mx.gpu()`.
 
 ```python
 # create a trainable module on GPU 0
-lenet_model = mx.mod.Module(symbol=lenet, context=mx.gpu())
-# train with the same hyper-parameters as before
+lenet_model = mx.mod.Module(symbol=lenet, context=mx.cpu())
+# train with the same
 lenet_model.fit(train_iter,
                 eval_data=val_iter,
                 optimizer='sgd',

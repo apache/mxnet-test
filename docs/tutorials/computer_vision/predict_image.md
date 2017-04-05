@@ -19,11 +19,12 @@ path='http://data.mxnet.io/models/imagenet-11k/'
  mx.test_utils.download(path+'synset.txt')]
 ```
 
-Next we load the downloaded model.
+Next we load the downloaded model (If GPU is available, we can replace all
+`mx.cpu()` to `mx.gpu()` to accelerate the computing).
 
 ```python
 sym, arg_params, aux_params = mx.model.load_checkpoint('resnet-152', 0)
-mod = mx.mod.Module(symbol=sym, context=mx.cpu())  # may change to mx.gpu() if GPU is available
+mod = mx.mod.Module(symbol=sym, context=mx.cpu())
 mod.bind(for_training=False, data_shapes=[('data', (1,3,224,224))])
 mod.set_params(arg_params, aux_params)
 with open('synset.txt', 'r') as f:
