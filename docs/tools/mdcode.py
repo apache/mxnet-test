@@ -7,7 +7,7 @@ import codecs
 import json
 
 # language names and the according file extensions
-# _LANGS = {'python':'py', 'r':'R', 'scala':'scala', 'julia':'jl', 'perl':'pl', 'cpp':'cc'}
+_LANGS = {'python', 'r', 'scala', 'julia', 'perl', 'cpp'}
 
 # start or end of a code block
 _CODE_MARK = re.compile('^([ ]*)```([\w]*)')
@@ -27,13 +27,16 @@ class CodeBlocks(object):
             m = _CODE_MARK.match(l)
             if m is not None:
                 if not in_code:
-                    lang = m.groups()[1].lower()
-                    indent = len(m.groups()[0])
-                yield (l, True, lang, indent)
-                if in_code:
+                    if m.groups()[1].lower() in _LANGS:
+                        lang = m.groups()[1].lower()
+                        indent = len(m.groups()[0])
+                        in_code = True
+                    yield (l, in_code, lang, indent)
+                else:
+                    yield (l, in_code, lang, indent)
                     lang = None
                     indent = None
-                in_code = not in_code
+                    in_code = False
             else:
                 yield (l, in_code, lang, indent)
 
@@ -91,7 +94,8 @@ class CodeBlocks(object):
                 (pre_in_code, pre_lang) = (in_code, lang)
             self._add_jupyter_block(cur_block, pre_in_code)
 
-            ipynb = {"nbformat":4, "nbformat_minor":2, "metadata":{}, "cells":self.cells}
+            ipynb = {"nbformat":4, "nbformat_minor":2,
+                     "metadata":{"language":self.lang, "display_name":'', "name":''}, "cells":self.cells}
             with open(ofname, 'w') as f:
                 json.dump(ipynb, f)
             return
@@ -121,23 +125,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description="""Manipulate code blocks in markdown files.
-
 Sample usage:
-
 - extract all python code blocks in example
-
   ./mdcode.py get python example.md example.py
-
 - remove all codes blocks except for python
-
   ./mdcode.py keep python example.md example_py.md
-
 - remove all codes blocks except for python and then convert into jupyter notebook
-
   ./mdcode.py convert python example.md example.ipynb
-
 - add the language selection botton group into example.md
-
   ./mdcode.py add_btn all example.md example.md
     """)
     parser.add_argument('action', help='action',
