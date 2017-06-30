@@ -56,9 +56,11 @@ stage("Sanity Check") {
 def make(docker_type, make_flag) {
   timeout(time: max_time, unit: 'MINUTES') {
     try {
+      sh "newgrp docker"
       sh "${docker_run} ${docker_type} make ${make_flag}"
     } catch (exc) {
       echo 'Incremental compilation failed. Fall back to build from scratch'
+      sh "newgrp docker"
       sh "${docker_run} ${docker_type} sudo make clean"
       sh "${docker_run} ${docker_type} make ${make_flag}"
     }
@@ -155,6 +157,7 @@ USE_CPP_PACKAGE=1             \
 // Python unittest for CPU
 def python_ut(docker_type) {
   timeout(time: max_time, unit: 'MINUTES') {
+    sh "newgrp docker"
     sh "${docker_run} ${docker_type} PYTHONPATH=./python/ nosetests --with-timer --verbose tests/python/unittest"
     sh "${docker_run} ${docker_type} PYTHONPATH=./python/ nosetests-3.4 --with-timer --verbose tests/python/unittest"
     sh "${docker_run} ${docker_type} PYTHONPATH=./python/ nosetests --with-timer --verbose tests/python/train"
@@ -165,6 +168,7 @@ def python_ut(docker_type) {
 // both CPU and GPU
 def python_gpu_ut(docker_type) {
   timeout(time: max_time, unit: 'MINUTES') {
+    sh "newgrp docker"
     sh "${docker_run} ${docker_type} PYTHONPATH=./python/ nosetests --with-timer --verbose tests/python/gpu"
     sh "${docker_run} ${docker_type} PYTHONPATH=./python/ nosetests-3.4 --with-timer --verbose tests/python/gpu"
   }
@@ -205,6 +209,7 @@ stage('Unit Test') {
         init_git()
         unpack_lib('cpu')
         timeout(time: max_time, unit: 'MINUTES') {
+          sh "newgrp docker"
           sh "${docker_run} cpu make scalapkg USE_BLAS=openblas"
           sh "${docker_run} cpu make scalatest USE_BLAS=openblas"
         }
@@ -221,6 +226,7 @@ stage('Integration Test') {
         init_git()
         unpack_lib('gpu')
         timeout(time: max_time, unit: 'MINUTES') {
+          sh "newgrp docker"
           sh "${docker_run} gpu PYTHONPATH=./python/ python example/image-classification/test_score.py"
         }
       }
@@ -232,6 +238,7 @@ stage('Integration Test') {
         init_git()
         unpack_lib('gpu')
         timeout(time: max_time, unit: 'MINUTES') {
+          sh "newgrp docker"
           sh "${docker_run} caffe_gpu PYTHONPATH=/caffe/python:./python python tools/caffe_converter/test_converter.py"
         }
       }
@@ -244,6 +251,7 @@ stage('Integration Test') {
         unpack_lib('gpu')
         unstash 'cpp_test_score'
         timeout(time: max_time, unit: 'MINUTES') {
+          sh "newgrp docker"
           sh "${docker_run} gpu cpp-package/tests/ci_test.sh"
         }
       }
