@@ -4,5 +4,7 @@
 // Runs nightly builds
 
 stage("Hello World") {
-  sh 'Hello World'
+  node('mxnetlinux') {
+    sh 'Hello World'
+  }
 }
