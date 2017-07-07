@@ -56,11 +56,9 @@ stage("Sanity Check") {
 def make(docker_type, make_flag) {
   timeout(time: max_time, unit: 'MINUTES') {
     try {
-      sh "newgrp docker"
       sh "${docker_run} ${docker_type} make ${make_flag}"
     } catch (exc) {
       echo 'Incremental compilation failed. Fall back to build from scratch'
-      sh "newgrp docker"
       sh "${docker_run} ${docker_type} sudo make clean"
       sh "${docker_run} ${docker_type} make ${make_flag}"
     }
@@ -151,13 +149,72 @@ USE_CPP_PACKAGE=1             \
         pack_lib('mklml')
       }
     }
+  },
+  'CPU windows':{
+    node('mxnetwindows') {
+      ws('workspace/build-cpu') {
+        withEnv(['OpenBLAS_HOME=C:\\mxnet\\openblas', 'OpenCV_DIR=C:\\mxnet\\opencv_vc14', 'CUDA_PATH=C:\\CUDA\\v8.0']) {
+          init_git_win()
+          bat """mkdir build_vc14_cpu
+cd build_vc14_cpu
+cmake -G \"Visual Studio 14 2015 Win64\" -DUSE_CUDA=0 -DUSE_CUDNN=0 -DUSE_NVRTC=0 -DUSE_OPENCV=1 -DUSE_OPENMP=1 -DUSE_PROFILER=1 -DUSE_BLAS=open -DUSE_LAPACK=1 -DUSE_DIST_KVSTORE=0 ${env.WORKSPACE}"""
+          bat 'C:\\mxnet\\build_vc14_cpu.bat'
+
+          bat '''rmdir /s/q pkg_vc14_gpu
+mkdir pkg_vc14_cpu\\lib
+mkdir pkg_vc14_cpu\\python
+mkdir pkg_vc14_cpu\\include
+mkdir pkg_vc14_cpu\\build
+copy build_vc14_cpu\\Release\\libmxnet.lib pkg_vc14_cpu\\lib
+copy build_vc14_cpu\\Release\\libmxnet.dll pkg_vc14_cpu\\build
+xcopy python pkg_vc14_cpu\\python /E /I /Y
+xcopy include pkg_vc14_cpu\\include /E /I /Y
+xcopy dmlc-core\\include pkg_vc14_cpu\\include /E /I /Y
+xcopy mshadow\\mshadow pkg_vc14_cpu\\include\\mshadow /E /I /Y
+xcopy nnvm\\include pkg_vc14_cpu\\nnvm\\include /E /I /Y
+del /Q *.7z
+7z.exe a vc14_cpu.7z pkg_vc14_cpu\\
+'''
+          stash includes: 'vc14_cpu.7z', name: 'vc14_cpu'
+         }
+        }
+       }
+     },
+     'GPU windows':{
+       node('mxnetwindows') {
+         ws('workspace/build-gpu') {
+           withEnv(['OpenBLAS_HOME=C:\\mxnet\\openblas', 'OpenCV_DIR=C:\\mxnet\\opencv_vc14', 'CUDA_PATH=C:\\CUDA\\v8.0']) {
+             init_git_win()
+             bat """mkdir build_vc14_gpu
+call "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\bin\\x86_amd64\\vcvarsx86_amd64.bat"
+cd build_vc14_gpu
+cmake -G \"NMake Makefiles JOM\" -DUSE_CUDA=1 -DUSE_CUDNN=1 -DUSE_NVRTC=1 -DUSE_OPENCV=1 -DUSE_OPENMP=1 -DUSE_PROFILER=1 -DUSE_BLAS=open -DUSE_LAPACK=1 -DUSE_DIST_KVSTORE=0 -DCUDA_ARCH_NAME=All -DCMAKE_CXX_FLAGS_RELEASE="/FS /MD /O2 /Ob2 /DNDEBUG" -DCMAKE_BUILD_TYPE=Release ${env.WORKSPACE}"""
+             bat 'C:\\mxnet\\build_vc14_gpu.bat'
+             bat '''rmdir /s/q pkg_vc14_gpu
+mkdir pkg_vc14_gpu\\lib
+mkdir pkg_vc14_gpu\\python
+mkdir pkg_vc14_gpu\\include
+mkdir pkg_vc14_gpu\\build
+copy build_vc14_gpu\\libmxnet.lib pkg_vc14_gpu\\lib
+copy build_vc14_gpu\\libmxnet.dll pkg_vc14_gpu\\build
+xcopy python pkg_vc14_gpu\\python /E /I /Y
+xcopy include pkg_vc14_gpu\\include /E /I /Y
+xcopy dmlc-core\\include pkg_vc14_gpu\\include /E /I /Y
+xcopy mshadow\\mshadow pkg_vc14_gpu\\include\\mshadow /E /I /Y
+xcopy nnvm\\include pkg_vc14_gpu\\nnvm\\include /E /I /Y
+del /Q *.7z
+7z.exe a vc14_gpu.7z pkg_vc14_gpu\\
+'''
+             stash includes: 'vc14_gpu.7z', name: 'vc14_gpu'
+           }
+         }
+       }
   }
 }
 
 // Python unittest for CPU
 def python_ut(docker_type) {
   timeout(time: max_time, unit: 'MINUTES') {
-    sh "newgrp docker"
     sh "${docker_run} ${docker_type} PYTHONPATH=./python/ nosetests --with-timer --verbose tests/python/unittest"
     sh "${docker_run} ${docker_type} PYTHONPATH=./python/ nosetests-3.4 --with-timer --verbose tests/python/unittest"
     sh "${docker_run} ${docker_type} PYTHONPATH=./python/ nosetests --with-timer --verbose tests/python/train"
@@ -168,7 +225,6 @@ def python_ut(docker_type) {
 // both CPU and GPU
 def python_gpu_ut(docker_type) {
   timeout(time: max_time, unit: 'MINUTES') {
-    sh "newgrp docker"
     sh "${docker_run} ${docker_type} PYTHONPATH=./python/ nosetests --with-timer --verbose tests/python/gpu"
     sh "${docker_run} ${docker_type} PYTHONPATH=./python/ nosetests-3.4 --with-timer --verbose tests/python/gpu"
   }
@@ -209,7 +265,6 @@ stage('Unit Test') {
         init_git()
         unpack_lib('cpu')
         timeout(time: max_time, unit: 'MINUTES') {
-          sh "newgrp docker"
           sh "${docker_run} cpu make scalapkg USE_BLAS=openblas"
           sh "${docker_run} cpu make scalatest USE_BLAS=openblas"
         }
@@ -245,7 +300,7 @@ stage('Unit Test') {
         }
       }
     }
-  },  
+  },
   'Python2/3: CPU Win':{
     node('mxnetwindows') {
       ws('workspace/ut-python-cpu') {
@@ -296,7 +351,6 @@ stage('Integration Test') {
         init_git()
         unpack_lib('gpu')
         timeout(time: max_time, unit: 'MINUTES') {
-          sh "newgrp docker"
           sh "${docker_run} gpu PYTHONPATH=./python/ python example/image-classification/test_score.py"
         }
       }
@@ -308,7 +362,6 @@ stage('Integration Test') {
         init_git()
         unpack_lib('gpu')
         timeout(time: max_time, unit: 'MINUTES') {
-          sh "newgrp docker"
           sh "${docker_run} caffe_gpu PYTHONPATH=/caffe/python:./python python tools/caffe_converter/test_converter.py"
         }
       }
@@ -321,7 +374,6 @@ stage('Integration Test') {
         unpack_lib('gpu')
         unstash 'cpp_test_score'
         timeout(time: max_time, unit: 'MINUTES') {
-          sh "newgrp docker"
           sh "${docker_run} gpu cpp-package/tests/ci_test.sh"
         }
       }
