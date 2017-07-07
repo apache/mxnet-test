@@ -5,6 +5,6 @@
 
 stage("Hello World") {
   node('mxnetlinux') {
-    sh 'Hello World'
+    sh "echo "'Hello World'"
   }
 }
