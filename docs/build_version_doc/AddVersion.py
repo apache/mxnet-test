@@ -43,6 +43,12 @@ if __name__ == '__main__':
             navbar = content.find(id="main-nav")
             navbar_mobile = content.find(id="burgerMenu")
             if navbar and navbar_mobile:
+                version_tag = content.find(id="dropdown-menu-position-anchor-version")
+                version_tag_mobile = content.find(id="dropdown-menu-position-anchor-version-mobile")
+                if version_tag:
+                    version_tag.extract()
+                if version_tag_mobile:
+                    version_tag_mobile.extract()
                 navbar.append(version_str)
                 navbar_mobile.append(version_str_mobile)
                 outstr = str(content).replace('&lt;', '<').replace('&gt;', '>')

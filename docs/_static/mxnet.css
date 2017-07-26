@@ -189,7 +189,9 @@ img {
     text-decoration: none;
 }
 
-#dropdown-menu-position-anchor {
+#dropdown-menu-position-anchor, 
+#dropdown-menu-position-anchor-version, 
+#dropdown-menu-position-anchor-version-mobile {
     position: relative;
 }
 
