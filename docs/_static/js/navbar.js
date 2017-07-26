@@ -1,9 +1,9 @@
 var searchBox = $("#search-input-wrap");
-var TITLE = ['/get_started/', '/tutorials/', '/how_to/', '/api/', '/architecture/', 'versions/'];
+var TITLE = ['/get_started/', '/tutorials/', '/how_to/', '/api/', '/architecture/'];
 var APIsubMenu;
 $("#burgerMenu").children().each(function () {
     if($(this).children().first().html() == 'API') APIsubMenu = $(this).clone()
-    if($(this).children().first().html().startsWith('versions')) VersionsubMenu = $(this).clone()
+    if($(this).children().first().html().startsWith('Versions')) VersionsubMenu = $(this).clone()
 });
 
 function navbar() {
