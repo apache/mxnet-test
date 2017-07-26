@@ -56,3 +56,13 @@ fi
 
 rm -rf "$web_folder/versions/master"
 cp -R master "$web_folder/versions/master"
+
+if [ $latest_tag != ${tag_list[0]} ]
+then
+    total=${#tag_list[*]}
+    for (( i=0; i<=$(( $total -1 )); i++ ))
+    do
+        python AddVersion.py --file_path "$web_folder/versions/${tag_list[$i]}" \
+                             --current_version "${tag_list[$i]}"
+    done
+fi
