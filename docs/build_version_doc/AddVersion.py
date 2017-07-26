@@ -32,7 +32,7 @@ if __name__ == '__main__':
         version_str += '<li><a class="main-nav-link" href=%s>%s</a></li>' % (url, tag)
         version_str_mobile += '<li><a tabindex="-1" href=%s>%s</a></li>' % (url, tag)
     version_str += '</ul></span>'
-    version_str_mobile += '</ul><li>'
+    version_str_mobile += '</ul></li>'
 
     for path, subdirs, files in os.walk(args.file_path):
         for name in files:
