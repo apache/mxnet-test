@@ -1,6 +1,6 @@
 #!/bin/bash
 
-web_url="https://github.com/kevinthesun/ApacheJenkinsWebTest"
+web_url="https://github.com/kevinthesun/mxnet.git"
 mxnet_url="https://github.com/kevinthesun/mxnet.git"
 web_folder="VersionedWeb"
 mxnet_folder="mxnet"
