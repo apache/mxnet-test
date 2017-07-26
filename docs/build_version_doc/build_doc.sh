@@ -35,7 +35,7 @@ cd ..
 cp "$web_folder/tag.txt" tag_list.txt
 if [ $latest_tag != ${tag_list[0]} ]
 then
-    echo -e "DATA-Line-1\n$(cat tag_list.txt)" > tag_list.txt
+    echo -e "$latest_tag\n$(cat tag_list.txt)" > tag_list.txt
     cat tag_list.txt
 fi
 python AddVersion.py --file_path "$mxnet_folder/docs/_build/html/"
