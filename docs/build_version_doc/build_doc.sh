@@ -12,12 +12,11 @@ mkdir "$local_build"
 
 tag_list_file="docs/build_version_doc/tag_list.txt"
 cp "$web_folder/tag.txt" "$tag_list_file"
-input="tag_list.txt"
 tag_list=()
 while read -r line 
 do
     tag_list+=("$line")
-done < "$input"
+done < "$tag_list_file"
 latest_tag=${tag_list[0]}
 echo "latest_tag is: $latest_tag"
 commit_id=$(git rev-parse HEAD)
