@@ -21,12 +21,14 @@ latest_tag=${tag_list[0]}
 echo "latest_tag is: $latest_tag"
 commit_id=$(git rev-parse HEAD)
 curr_tag='${TAG:5}'
+echo "Current tag is $curr_tag"
 if [[ "$curr_tag" != 'master' ]] && [ $curr_tag != $latest_tag ]
 then
     latest_tag=$curr_tag
 fi
 if [ $latest_tag != ${tag_list[0]} ]
 then
+    echo "Building new tag"
     git submodule update
     make docs || exit 1
     echo -e "$latest_tag\n$(cat $tag_list_file)" > "$tag_list_file"
@@ -44,8 +46,10 @@ then
     cp -a "$local_build/." "$web_folder"
 fi
 
-git checkout master
+git checkout VersionedDoc
+git checkout -- .
 git submodule update
+echo "Building master"
 make docs || exit 1
 
 rm -rfv "$web_folder/versions/master/*"
