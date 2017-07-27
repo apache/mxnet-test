@@ -20,7 +20,7 @@ done < "$tag_list_file"
 latest_tag=${tag_list[0]}
 echo "latest_tag is: $latest_tag"
 commit_id=$(git rev-parse HEAD)
-curr_tag='${TAG:4}'
+curr_tag='${TAG:5}'
 if [[ "$curr_tag" != 'master' ]] && [ $curr_tag != $latest_tag ]
 then
     latest_tag=$curr_tag
