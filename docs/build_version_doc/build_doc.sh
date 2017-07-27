@@ -25,6 +25,7 @@ then
     curr_tag=''
 else
     curr_tag='${TAG:4}'
+fi
 if [[ "$curr_tag" != '' ]] && [ $curr_tag != $latest_tag ]
 then
     latest_tag=$curr_tag
