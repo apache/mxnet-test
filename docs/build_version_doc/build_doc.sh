@@ -39,7 +39,7 @@ then
     cd ../..
     cp -a "docs/_build/html/." "$local_build"
     cp $tag_list_file "$local_build/tag.txt"
-    rm "$web_folder/.git"
+    rm -rf "$web_folder/.git"
     cp -a "$web_folder/versions/." "$local_build/versions"
     mkdir "$local_build/versions/${tag_list[0]}"
     cp -a "$web_folder/." "$local_build/versions/${tag_list[0]}"
