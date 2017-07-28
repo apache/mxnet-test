@@ -35,7 +35,7 @@ then
     echo -e "$latest_tag\n$(cat $tag_list_file)" > "$tag_list_file"
     cat $tag_list_file
     cd "docs/build_version_doc"
-    python AddVersion.py --file_path "$mxnet_folder/docs/_build/html/"
+    python AddVersion.py --file_path "$../_build/html/"
     cd ../..
     cp -a "docs/_build/html/." "$local_build"
     cp $tag_list_file "$local_build/tag.txt"
@@ -63,7 +63,7 @@ then
     cd "docs/build_version_doc"
     for (( i=0; i<=$(( $total -1 )); i++ ))
     do
-        python AddVersion.py --file_path "$web_folder/versions/${tag_list[$i]}" \
+        python AddVersion.py --file_path "../../$web_folder/versions/${tag_list[$i]}" \
                              --current_version "${tag_list[$i]}"
     done
 fi
