@@ -1,6 +1,6 @@
 #!/bin/bash
 
-web_url="https://github.com/kevinthesun/mxnet.git"
+web_url="$1"
 web_folder="VersionedWeb"
 local_build="latest"
 web_branch="static_web"
@@ -10,6 +10,7 @@ git checkout -b $web_branch "origin/$web_branch"
 cd ..
 mkdir "$local_build"
 
+# Fetch tag information
 tag_list_file="docs/build_version_doc/tag_list.txt"
 cp "$web_folder/tag.txt" "$tag_list_file"
 tag_list=()
@@ -27,6 +28,8 @@ if [[ "$curr_tag" != 'master' ]] && [ $curr_tag != $latest_tag ]
 then
     latest_tag=$curr_tag
 fi
+
+# Build new released tag
 if [ $latest_tag != ${tag_list[0]} ]
 then
     echo "Building new tag"
@@ -48,6 +51,7 @@ then
     cp -a "$local_build/." "$web_folder"
 fi
 
+# Build latest master
 git checkout VersionedDoc
 git checkout -- .
 git submodule update
@@ -59,6 +63,7 @@ cp -a "docs/_build/html/." "$web_folder/versions/master"
 cd "docs/build_version_doc"
 python AddVersion.py --file_path "../../$web_folder/versions/master"
 
+# Update version list for all previous version website
 if [ $latest_tag != ${tag_list[0]} ]
 then
     total=${#tag_list[*]}
