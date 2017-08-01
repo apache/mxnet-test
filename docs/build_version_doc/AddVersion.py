@@ -8,11 +8,13 @@ parser.add_argument('--file_path', type=str, default='mxnet/docs/_build/html/',
                         help='file to be modified')
 parser.add_argument('--current_version', type=str, default='master',
                         help='Current version')
+parser.add_argument('--root_url', type=str, default='https://mxnet.io',
+                        help='Current version')
 
 if __name__ == '__main__':
     args = parser.parse_args()
 
-    root_url = "http://localhost:8008/"#"https://mxnet.incubator.apache.org/test/"
+    root_url = args.root_url
     tag_list = list()
     with open('tag_list.txt', 'r') as tag_file:
         for line in tag_file:
