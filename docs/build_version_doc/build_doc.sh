@@ -3,7 +3,7 @@
 web_url="$1"
 web_folder="VersionedWeb"
 local_build="latest"
-web_branch="static_web"
+web_branch="$2"
 git clone $web_url $web_folder
 cd $web_folder
 git checkout -b $web_branch "origin/$web_branch"
@@ -52,7 +52,7 @@ then
 fi
 
 # Build latest master
-git checkout VersionedDoc
+git checkout master
 git checkout -- .
 git submodule update
 echo "Building master"
