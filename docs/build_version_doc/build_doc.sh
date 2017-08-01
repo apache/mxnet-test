@@ -39,7 +39,7 @@ then
     echo -e "$latest_tag\n$(cat $tag_list_file)" > "$tag_list_file"
     cat $tag_list_file
     #cd "docs/build_version_doc"
-    tests/ci_build/ci_build.sh doc cd docs/build_version_doc && python AddVersion.py --file_path "../_build/html/" --current_version "$latest_tag"
+    tests/ci_build/ci_build.sh doc python -c "from bs4 import BeautifulSoup as bs" #cd docs/build_version_doc && python AddVersion.py --file_path "../_build/html/" --current_version "$latest_tag"
     #cd ../..
     cp -a "docs/_build/html/." "$local_build"
     cp $tag_list_file "$local_build/tag.txt"
