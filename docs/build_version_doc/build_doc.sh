@@ -11,7 +11,7 @@ cd ..
 mkdir "$local_build"
 
 # Fetch tag information
-tag_list_file="docs/build_version_doc/tag_list.txt"
+tag_list_file="tag_list.txt"
 cp "$web_folder/tag.txt" "$tag_list_file"
 tag_list=()
 while read -r line 
@@ -57,7 +57,7 @@ then
 fi
 
 # Build latest master
-git checkout master
+git checkout VersionedDoc
 git checkout -- .
 git submodule update
 echo "Building master"
