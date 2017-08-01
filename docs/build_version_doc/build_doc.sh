@@ -38,18 +38,8 @@ then
     make docs || exit 1
     echo -e "$latest_tag\n$(cat $tag_list_file)" > "$tag_list_file"
     cat $tag_list_file
-<<<<<<< HEAD
-<<<<<<< HEAD
-    #cd "docs/build_version_doc"
-    tests/ci_build/ci_build.sh doc python docs/build_version_doc/AddVersion.py
-    #cd ../..
-=======
-    python docs/build_version_doc/AddVersion.py --file_path "docs/_build/html/" --current_version "$latest_tag"
->>>>>>> d53dfab... Change addversion path
-=======
-    python docs/build_version_doc/AddVersion.py --file_path "docs/_build/html/" --current_version "$latest_tag" \
+    tests/ci_build/ci_build.sh doc python docs/build_version_doc/AddVersion.py --file_path "docs/_build/html/" --current_version "$latest_tag" \
                                                 --root_url "http://mxnet.incubator.apache.org/test/"
->>>>>>> 2635d3d... Fix
     cp -a "docs/_build/html/." "$local_build"
     cp $tag_list_file "$local_build/tag.txt"
     rm -rf "$web_folder/.git"
@@ -78,7 +68,7 @@ then
     total=${#tag_list[*]}
     for (( i=0; i<=$(( $total -1 )); i++ ))
     do
-        python docs/build_version_doc/AddVersion.py --file_path "$web_folder/versions/${tag_list[$i]}" \
+        tests/ci_build/ci_build.sh doc python docs/build_version_doc/AddVersion.py --file_path "$web_folder/versions/${tag_list[$i]}" \
                                                     --current_version "${tag_list[$i]}" --root_url "http://mxnet.incubator.apache.org/test/"
     done
 fi
