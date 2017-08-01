@@ -38,9 +38,9 @@ then
     make docs || exit 1
     echo -e "$latest_tag\n$(cat $tag_list_file)" > "$tag_list_file"
     cat $tag_list_file
-    cd "docs/build_version_doc"
-    python AddVersion.py --file_path "../_build/html/" --current_version "$latest_tag"
-    cd ../..
+    #cd "docs/build_version_doc"
+    tests/ci_build/ci_build.sh docs cd docs/build_version_doc && python AddVersion.py --file_path "../_build/html/" --current_version "$latest_tag"
+    #cd ../..
     cp -a "docs/_build/html/." "$local_build"
     cp $tag_list_file "$local_build/tag.txt"
     rm -rf "$web_folder/.git"
