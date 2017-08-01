@@ -34,6 +34,7 @@ if [ $latest_tag != ${tag_list[0]} ]
 then
     echo "Building new tag"
     git submodule update
+    git checkout $latest_tag
     make docs || exit 1
     echo -e "$latest_tag\n$(cat $tag_list_file)" > "$tag_list_file"
     cat $tag_list_file
