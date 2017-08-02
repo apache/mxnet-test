@@ -7,6 +7,7 @@ var searchData=
   ['mxnet_5flapack_5fcwrapper1',['MXNET_LAPACK_CWRAPPER1',['../c__lapack__api_8h.html#aa5297300313445fa46d2d1d2fb38970c',1,'c_lapack_api.h']]],
   ['mxnet_5flapack_5ffsignature1',['MXNET_LAPACK_FSIGNATURE1',['../c__lapack__api_8h.html#a56f112686aa64bf8a42204a3ff87ea46',1,'c_lapack_api.h']]],
   ['mxnet_5flapack_5frow_5fmajor',['MXNET_LAPACK_ROW_MAJOR',['../c__lapack__api_8h.html#a220562c35966392841ae49fefe2dee5e',1,'c_lapack_api.h']]],
+  ['mxnet_5flapack_5funavailable',['MXNET_LAPACK_UNAVAILABLE',['../c__lapack__api_8h.html#a0c98356495b08e7d69a4cafd8b034ab4',1,'c_lapack_api.h']]],
   ['mxnet_5fmajor',['MXNET_MAJOR',['../base_8h.html#aee5302444d57230419d0cd77bf72770d',1,'base.h']]],
   ['mxnet_5fmake_5fversion',['MXNET_MAKE_VERSION',['../base_8h.html#a4a85852d8252d23300a8364d48a1c8ea',1,'base.h']]],
   ['mxnet_5fminor',['MXNET_MINOR',['../base_8h.html#aea13dab0ddd61ec142feb0b6759c6acf',1,'base.h']]],

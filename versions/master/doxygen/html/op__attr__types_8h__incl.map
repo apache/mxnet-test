@@ -1,8 +1,0 @@
-<map id="include/mxnet/op_attr_types.h" name="include/mxnet/op_attr_types.h">
-<area shape="rect" id="node6" href="$base_8h.html" title="configuation of mxnet as well as basic data structure. " alt="" coords="1022,320,1094,347"/>
-<area shape="rect" id="node15" href="$operator_8h.html" title="Operator interface of mxnet. " alt="" coords="693,96,789,123"/>
-<area shape="rect" id="node26" href="$ndarray_8h.html" title="NDArray interface that handles array arithematics. " alt="" coords="1076,171,1165,197"/>
-<area shape="rect" id="node22" href="$resource_8h.html" title="Global resource allocation handling. " alt="" coords="457,171,556,197"/>
-<area shape="rect" id="node23" href="$engine_8h.html" title="Engine that schedules all the operations according to dependency. " alt="" coords="1118,245,1204,272"/>
-<area shape="rect" id="node27" href="$storage_8h.html" title="Storage manager across multiple devices. " alt="" coords="1228,245,1318,272"/>
-</map>

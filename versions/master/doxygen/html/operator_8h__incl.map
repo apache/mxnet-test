@@ -1,5 +1,0 @@
-<map id="include/mxnet/operator.h" name="include/mxnet/operator.h">
-<area shape="rect" id="node11" href="$base_8h.html" title="configuation of mxnet as well as basic data structure. " alt="" coords="652,229,724,256"/>
-<area shape="rect" id="node19" href="$resource_8h.html" title="Global resource allocation handling. " alt="" coords="607,80,706,107"/>
-<area shape="rect" id="node20" href="$engine_8h.html" title="Engine that schedules all the operations according to dependency. " alt="" coords="543,155,628,181"/>
-</map>
