@@ -60,7 +60,7 @@ make docs || exit 1
 
 rm -rfv "$web_folder/versions/master/*"
 cp -a "docs/_build/html/." "$web_folder/versions/master"
-python docs/build_version_doc/AddVersion.py --file_path "$web_folder/versions/master" --root_url "http://mxnet.incubator.apache.org/test/"
+tests/ci_build/ci_build.sh doc python docs/build_version_doc/AddVersion.py --file_path "$web_folder/versions/master" --root_url "http://mxnet.incubator.apache.org/test/"
 
 # Update version list for all previous version website
 if [ $latest_tag != ${tag_list[0]} ]
