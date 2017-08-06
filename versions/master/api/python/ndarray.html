@@ -8,9 +8,9 @@
 <title>NDArray API — mxnet  documentation</title>
 <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" rel="stylesheet"/>
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet"/>
-<link href="../../_static/basic.css" rel="stylesheet" type="text/css"/>
-<link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
-<link href="../../_static/mxnet.css" rel="stylesheet" type="text/css">
+<link href="../../_static/basic.css" rel="stylesheet" type="text/css">
+<link href="../../_static/pygments.css" rel="stylesheet" type="text/css">
+<link href="../../_static/mxnet.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
@@ -48,9 +48,9 @@
 <!-- -->
 <!-- <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 <!-- -->
-<link href="index.html" rel="up" title="MXNet - Python API"/>
-<link href="symbol.html" rel="next" title="Symbol API">
-<link href="index.html" rel="prev" title="MXNet - Python API">
+<link href="index.html" rel="up" title="MXNet - Python API">
+<link href="symbol.html" rel="next" title="Symbol API"/>
+<link href="index.html" rel="prev" title="MXNet - Python API"/>
 <link href="https://raw.githubusercontent.com/dmlc/web-data/master/mxnet/image/mxnet-icon.png" rel="icon" type="image/png"/>
 </link></link></link></head>
 <body role="document"><!-- Previous Navbar Layout
@@ -191,8 +191,8 @@ Previous Navbar Layout End -->
 <i class="glyphicon glyphicon-search"></i>
 <input class="form-control" name="q" placeholder="Search" type="text"/>
 </div>
-<input name="check_keywords" type="hidden" value="yes"/>
-<input name="area" type="hidden" value="default">
+<input name="check_keywords" type="hidden" value="yes">
+<input name="area" type="hidden" value="default"/>
 </input></form>
 <div id="search-preview"></div>
 </div>
@@ -279,7 +279,7 @@ imperative tensor operations on CPU/GPU.
 An <code class="docutils literal"><span class="pre">NDArray</span></code> represents a multi-dimensional, fixed-size homogenous array.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">>>> </span><span class="n">x</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]])</span>
 <span class="gp">>>> </span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="go"><class 'mxnet.ndarray.ndarray'=""></class></span>
+<span class="go"><class 'mxnet.ndarray.NDArray'></span>
 <span class="gp">>>> </span><span class="n">x</span><span class="o">.</span><span class="n">shape</span>
 <span class="go">(2, 3)</span>
 <span class="gp">>>> </span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span>
@@ -288,7 +288,7 @@ An <code class="docutils literal"><span class="pre">NDArray</span></code> repres
 <span class="go"> [ 7.  8.  9.]]</span>
 <span class="gp">>>> </span><span class="n">z</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">as_in_context</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
 <span class="gp">>>> </span><span class="k">print</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-<span class="go"><ndarray 2x3="" @gpu(0)=""></ndarray></span>
+<span class="go"><NDArray 2x3 @gpu(0)></span>
 </pre></div>
 </div>
 <p>A detailed tutorial is available at
@@ -474,7 +474,7 @@ broadcasting enabled by default.</li>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#mxnet.ndarray.NDArray.__lt__" title="mxnet.ndarray.NDArray.__lt__"><code class="xref py py-obj docutils literal"><span class="pre">NDArray.__lt__</span></code></a></td>
-<td>x.__lt__(y) <=> x<y <=""> mx.nd.lesser(x, y)</y></td>
+<td>x.__lt__(y) <=> x<y <=> mx.nd.lesser(x, y)</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#mxnet.ndarray.NDArray.__le__" title="mxnet.ndarray.NDArray.__le__"><code class="xref py py-obj docutils literal"><span class="pre">NDArray.__le__</span></code></a></td>
 <td>x.__le__(y) <=> x<=y <=> mx.nd.less_equal(x, y)</td>
@@ -1268,7 +1268,7 @@ fixed-size items.</p>
 <dl class="method">
 <dt id="mxnet.ndarray.NDArray.__lt__">
 <code class="descname">__lt__</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#mxnet.ndarray.NDArray.__lt__" title="Permalink to this definition">¶</a></dt>
-<dd><p>x.__lt__(y) <=> x<y <=""> mx.nd.lesser(x, y)</y></p>
+<dd><p>x.__lt__(y) <=> x<y <=> mx.nd.lesser(x, y)</p>
 </dd></dl>
 <dl class="method">
 <dt id="mxnet.ndarray.NDArray.__le__">
@@ -1502,7 +1502,7 @@ into the backend engine for execution are actually finished.</p>
 <span class="gp">>>> </span><span class="n">x</span><span class="o">.</span><span class="n">context</span>
 <span class="go">cpu(0)</span>
 <span class="gp">>>> </span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
-<span class="go"><class 'mxnet.context.context'=""></class></span>
+<span class="go"><class 'mxnet.context.Context'></span>
 <span class="gp">>>> </span><span class="n">y</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">mx</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
 <span class="gp">>>> </span><span class="n">y</span><span class="o">.</span><span class="n">context</span>
 <span class="go">gpu(0)</span>
@@ -1526,10 +1526,10 @@ into the backend engine for execution are actually finished.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">>>> </span><span class="n">x</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
 <span class="gp">>>> </span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span>
-<span class="go"><type 'numpy.float32'=""></type></span>
+<span class="go"><type 'numpy.float32'></span>
 <span class="gp">>>> </span><span class="n">y</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int32'</span><span class="p">)</span>
 <span class="gp">>>> </span><span class="n">y</span><span class="o">.</span><span class="n">dtype</span>
-<span class="go"><type 'numpy.int32'=""></type></span>
+<span class="go"><type 'numpy.int32'></span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1561,7 +1561,7 @@ rather than a view of the array unless <code class="docutils literal"><span clas
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">>>> </span><span class="n">x</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
 <span class="gp">>>> </span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">()</span>
 <span class="gp">>>> </span><span class="nb">type</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-<span class="go"><type 'numpy.ndarray'=""></type></span>
+<span class="go"><type 'numpy.ndarray'></span>
 <span class="gp">>>> </span><span class="n">y</span>
 <span class="go">array([[ 1.,  1.,  1.],</span>
 <span class="go">       [ 1.,  1.,  1.]], dtype=float32)</span>
@@ -1582,7 +1582,7 @@ rather than a view of the array unless <code class="docutils literal"><span clas
 <span class="gp">>>> </span><span class="n">x</span><span class="o">.</span><span class="n">asscalar</span><span class="p">()</span>
 <span class="go">1</span>
 <span class="gp">>>> </span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">asscalar</span><span class="p">())</span>
-<span class="go"><type 'numpy.int32'=""></type></span>
+<span class="go"><type 'numpy.int32'></span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1602,7 +1602,7 @@ rather than a view of the array unless <code class="docutils literal"><span clas
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">>>> </span><span class="n">x</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'float32'</span><span class="p">)</span>
 <span class="gp">>>> </span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'int32'</span><span class="p">)</span>
 <span class="gp">>>> </span><span class="n">y</span><span class="o">.</span><span class="n">dtype</span>
-<span class="go"><type 'numpy.int32'=""></type></span>
+<span class="go"><type 'numpy.int32'></span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1638,7 +1638,7 @@ and <code class="docutils literal"><span class="pre">other</span></code> will po
 <span class="go">array([[ 1.,  1.,  1.],</span>
 <span class="go">       [ 1.,  1.,  1.]], dtype=float32)</span>
 <span class="gp">>>> </span><span class="n">y</span><span class="o">.</span><span class="n">copyto</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-<span class="go"><ndarray 2x3="" @gpu(0)=""></ndarray></span>
+<span class="go"><NDArray 2x3 @gpu(0)></span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1724,7 +1724,7 @@ returned.  Otherwise, a copy is made.</p>
 </dd></dl>
 <dl class="function">
 <dt id="mxnet.ndarray.empty">
-<code class="descclassname">mxnet.ndarray.</code><code class="descname">empty</code><span class="sig-paren">(</span><em>shape</em>, <em>ctx=None</em>, <em>dtype=<mock id="47193208544272" name="mock.float32"></mock></em><span class="sig-paren">)</span><a class="headerlink" href="#mxnet.ndarray.empty" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">mxnet.ndarray.</code><code class="descname">empty</code><span class="sig-paren">(</span><em>shape</em>, <em>ctx=None</em>, <em>dtype=<Mock name='mock.float32' id='47711027887120'></em><span class="sig-paren">)</span><a class="headerlink" href="#mxnet.ndarray.empty" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a new array of given shape and type, without initializing entries.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name"/>
@@ -1747,17 +1747,17 @@ returned.  Otherwise, a copy is made.</p>
 </table>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="go"><ndarray 1="" @cpu(0)=""></ndarray></span>
+<span class="go"><NDArray 1 @cpu(0)></span>
 <span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">mx</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-<span class="go"><ndarray 1x2="" @gpu(0)=""></ndarray></span>
+<span class="go"><NDArray 1x2 @gpu(0)></span>
 <span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">mx</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="s1">'float16'</span><span class="p">)</span>
-<span class="go"><ndarray 1x2="" @gpu(0)=""></ndarray></span>
+<span class="go"><NDArray 1x2 @gpu(0)></span>
 </pre></div>
 </div>
 </dd></dl>
 <dl class="function">
 <dt id="mxnet.ndarray.zeros">
-<code class="descclassname">mxnet.ndarray.</code><code class="descname">zeros</code><span class="sig-paren">(</span><em>shape</em>, <em>ctx=None</em>, <em>dtype=<mock id="47193208544272" name="mock.float32"></mock></em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#mxnet.ndarray.zeros" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">mxnet.ndarray.</code><code class="descname">zeros</code><span class="sig-paren">(</span><em>shape</em>, <em>ctx=None</em>, <em>dtype=<Mock name='mock.float32' id='47711027887120'></em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#mxnet.ndarray.zeros" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a new array filled with all zeros, with the given shape and type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name"/>
@@ -1783,7 +1783,7 @@ returned.  Otherwise, a copy is made.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">()</span>
 <span class="go">array([ 0.], dtype=float32)</span>
 <span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">mx</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-<span class="go"><ndarray 1x2="" @gpu(0)=""></ndarray></span>
+<span class="go"><NDArray 1x2 @gpu(0)></span>
 <span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">mx</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="s1">'float16'</span><span class="p">)</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">()</span>
 <span class="go">array([[ 0.,  0.]], dtype=float16)</span>
 </pre></div>
@@ -1791,7 +1791,7 @@ returned.  Otherwise, a copy is made.</p>
 </dd></dl>
 <dl class="function">
 <dt id="mxnet.ndarray.ones">
-<code class="descclassname">mxnet.ndarray.</code><code class="descname">ones</code><span class="sig-paren">(</span><em>shape</em>, <em>ctx=None</em>, <em>dtype=<mock id="47193208544272" name="mock.float32"></mock></em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#mxnet.ndarray.ones" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">mxnet.ndarray.</code><code class="descname">ones</code><span class="sig-paren">(</span><em>shape</em>, <em>ctx=None</em>, <em>dtype=<Mock name='mock.float32' id='47711027887120'></em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#mxnet.ndarray.ones" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a new array filled with all ones, with the given shape and type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name"/>
@@ -1818,7 +1818,7 @@ Defaults to the current default context (<code class="docutils literal"><span cl
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">()</span>
 <span class="go">array([ 1.], dtype=float32)</span>
 <span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">mx</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-<span class="go"><ndarray 1x2="" @gpu(0)=""></ndarray></span>
+<span class="go"><NDArray 1x2 @gpu(0)></span>
 <span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'float16'</span><span class="p">)</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">()</span>
 <span class="go">array([[ 1.,  1.]], dtype=float16)</span>
 </pre></div>
@@ -1826,7 +1826,7 @@ Defaults to the current default context (<code class="docutils literal"><span cl
 </dd></dl>
 <dl class="function">
 <dt id="mxnet.ndarray.full">
-<code class="descclassname">mxnet.ndarray.</code><code class="descname">full</code><span class="sig-paren">(</span><em>shape</em>, <em>val</em>, <em>ctx=None</em>, <em>dtype=<mock id="47193208544272" name="mock.float32"></mock></em>, <em>out=None</em><span class="sig-paren">)</span><a class="headerlink" href="#mxnet.ndarray.full" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">mxnet.ndarray.</code><code class="descname">full</code><span class="sig-paren">(</span><em>shape</em>, <em>val</em>, <em>ctx=None</em>, <em>dtype=<Mock name='mock.float32' id='47711027887120'></em>, <em>out=None</em><span class="sig-paren">)</span><a class="headerlink" href="#mxnet.ndarray.full" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a new array of given shape and type, filled with the given value <cite>val</cite>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name"/>
@@ -1853,7 +1853,7 @@ Defaults to the current default context (<code class="docutils literal"><span cl
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">()</span>
 <span class="go">array([ 2.], dtype=float32)</span>
 <span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-<span class="go"><ndarray 1x2="" @gpu(0)=""></ndarray></span>
+<span class="go"><NDArray 1x2 @gpu(0)></span>
 <span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'float16'</span><span class="p">)</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">()</span>
 <span class="go">array([[ 2.,  2.]], dtype=float16)</span>
 </pre></div>
@@ -1887,13 +1887,13 @@ if <cite>source_array</cite> is an <cite>NDArray</cite>, <cite>float32</cite> ot
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">>>> </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
-<span class="go"><ndarray 3="" @cpu(0)=""></ndarray></span>
+<span class="go"><NDArray 3 @cpu(0)></span>
 <span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
-<span class="go"><ndarray 2x2="" @cpu(0)=""></ndarray></span>
+<span class="go"><NDArray 2x2 @cpu(0)></span>
 <span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
-<span class="go"><ndarray 3x2="" @cpu(0)=""></ndarray></span>
+<span class="go"><NDArray 3x2 @cpu(0)></span>
 <span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span> <span class="n">mx</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-<span class="go"><ndarray 3x2="" @gpu(0)=""></ndarray></span>
+<span class="go"><NDArray 3x2 @gpu(0)></span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1931,7 +1931,7 @@ Array with moved axes.</p>
 </dd></dl>
 <dl class="function">
 <dt id="mxnet.ndarray.arange">
-<code class="descclassname">mxnet.ndarray.</code><code class="descname">arange</code><span class="sig-paren">(</span><em>start</em>, <em>stop=None</em>, <em>step=1.0</em>, <em>repeat=1</em>, <em>ctx=None</em>, <em>dtype=<mock id="47193208544272" name="mock.float32"></mock></em><span class="sig-paren">)</span><a class="headerlink" href="#mxnet.ndarray.arange" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">mxnet.ndarray.</code><code class="descname">arange</code><span class="sig-paren">(</span><em>start</em>, <em>stop=None</em>, <em>step=1.0</em>, <em>repeat=1</em>, <em>ctx=None</em>, <em>dtype=<Mock name='mock.float32' id='47711027887120'></em><span class="sig-paren">)</span><a class="headerlink" href="#mxnet.ndarray.arange" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns evenly spaced values within a given interval.</p>
 <p>Values are generated within the half-open interval [<cite>start</cite>, <cite>stop</cite>). In other
 words, the interval includes <cite>start</cite> but excludes <cite>stop</cite>. The function is
@@ -2186,7 +2186,7 @@ broadcastable to a common shape.</li>
 <span class="go">array([[ 2.],</span>
 <span class="go">       [ 2.]], dtype=float32)</span>
 <span class="gp">>>> </span><span class="n">x</span><span class="o">/</span><span class="mi">2</span>
-<span class="go"><ndarray 2x3="" @cpu(0)=""></ndarray></span>
+<span class="go"><NDArray 2x3 @cpu(0)></span>
 <span class="gp">>>> </span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">()</span>
 <span class="go">array([[ 2.,  2.,  2.],</span>
 <span class="go">       [ 2.,  2.,  2.]], dtype=float32)</span>
@@ -2239,7 +2239,7 @@ broadcastable to a common shape.</li>
 <span class="go">array([[ 4.],</span>
 <span class="go">       [ 4.]], dtype=float32)</span>
 <span class="gp">>>> </span><span class="n">x</span><span class="o">%</span><span class="mi">5</span>
-<span class="go"><ndarray 2x3="" @cpu(0)=""></ndarray></span>
+<span class="go"><NDArray 2x3 @cpu(0)></span>
 <span class="gp">>>> </span><span class="p">(</span><span class="n">x</span><span class="o">%</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">()</span>
 <span class="go">array([[ 1.,  1.,  1.],</span>
 <span class="go">       [ 1.,  1.,  1.]], dtype=float32)</span>
@@ -2849,9 +2849,9 @@ The output of this function.</p>
 <span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">'my_list'</span><span class="p">,</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">])</span>
 <span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">'my_dict'</span><span class="p">,</span> <span class="p">{</span><span class="s1">'x'</span><span class="p">:</span><span class="n">x</span><span class="p">,</span> <span class="s1">'y'</span><span class="p">:</span><span class="n">y</span><span class="p">})</span>
 <span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'my_list'</span><span class="p">)</span>
-<span class="go">[<ndarray 2x3="" @cpu(0)="">, <ndarray 1x4="" @cpu(0)="">]</ndarray></ndarray></span>
+<span class="go">[<NDArray 2x3 @cpu(0)>, <NDArray 1x4 @cpu(0)>]</span>
 <span class="gp">>>> </span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'my_dict'</span><span class="p">)</span>
-<span class="go">{'y': <ndarray 1x4="" @cpu(0)="">, 'x': <ndarray 2x3="" @cpu(0)="">}</ndarray></ndarray></span>
+<span class="go">{'y': <NDArray 1x4 @cpu(0)>, 'x': <NDArray 2x3 @cpu(0)>}</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -10579,8 +10579,8 @@ an input shape <code class="docutils literal"><span class="pre">(2,3)</span></co
 </pre></div>
 </div>
 </li>
-<li><p class="first"><strong>n<d< strong="">. The input is promoted to be d-dimensional by prepending new axes. So a
-shape <code class="docutils literal"><span class="pre">(2,2)</span></code> array is promoted to <code class="docutils literal"><span class="pre">(1,2,2)</span></code> for 3-D replication:</d<></strong></p>
+<li><p class="first"><strong>n<d</strong>. The input is promoted to be d-dimensional by prepending new axes. So a
+shape <code class="docutils literal"><span class="pre">(2,2)</span></code> array is promoted to <code class="docutils literal"><span class="pre">(1,2,2)</span></code> for 3-D replication:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tile</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span> <span class="o">=</span> <span class="p">[[[</span> <span class="mf">1.</span><span class="p">,</span>  <span class="mf">2.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">2.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">2.</span><span class="p">],</span>
                           <span class="p">[</span> <span class="mf">3.</span><span class="p">,</span>  <span class="mf">4.</span><span class="p">,</span>  <span class="mf">3.</span><span class="p">,</span>  <span class="mf">4.</span><span class="p">,</span>  <span class="mf">3.</span><span class="p">,</span>  <span class="mf">4.</span><span class="p">],</span>
                           <span class="p">[</span> <span class="mf">1.</span><span class="p">,</span>  <span class="mf">2.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">2.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">2.</span><span class="p">],</span>
